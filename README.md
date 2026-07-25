@@ -8,28 +8,31 @@ A browser-based warehouse receiving, inventory, and barcode-scanning app by **Pi
 
 ```
 pixel-warehouse-pro/
-├── pixel-warehouse-pro.html   ← the app (open this file / set as your host's entry point)
+├── index.html                 ← the app (this MUST be named index.html for static hosts/GitHub Pages to find it)
 ├── manifest.json              ← PWA manifest (install metadata, icons, brand colors)
 ├── sw.js                      ← service worker (offline caching of the app shell)
 ├── icons/                     ← app icon set, all required PWA sizes
 │   ├── icon-72.png … icon-512.png
 │   └── icon-maskable-192.png, icon-maskable-512.png
+├── .nojekyll                  ← tells GitHub Pages to skip Jekyll processing and serve files as-is
 └── README.md                  ← this file
 ```
 
-All four items (`pixel-warehouse-pro.html`, `manifest.json`, `sw.js`, `icons/`) must stay in the **same folder**, at the same relative paths, or the manifest/service worker/icons won't resolve.
+All items (`index.html`, `manifest.json`, `sw.js`, `icons/`, `.nojekyll`) must stay in the **same folder**, at the same relative paths, or the manifest/service worker/icons won't resolve.
+
+> **Why the file is named `index.html`:** static hosts (GitHub Pages, Netlify, etc.) automatically serve a file named `index.html` when someone visits your site's root URL. If the entry file has any other name, the host has nothing to show at `/` and — on GitHub Pages specifically — will fall back to rendering your `README.md` through its default Jekyll theme instead of your app. The `.nojekyll` file also matters: without it, GitHub Pages runs your repo through Jekyll, which can interfere with files/folders that start with an underscore or otherwise get treated specially. An empty `.nojekyll` file disables that processing so every file is served exactly as-is.
 
 ---
 
 ## Quick start
 
 **Just want to look at it?**
-Double-click `pixel-warehouse-pro.html`. It opens straight in your browser. Note: PWA install and offline caching won't activate over `file://` — see below.
+Double-click `index.html`. It opens straight in your browser. Note: PWA install and offline caching won't activate over `file://` — see below.
 
 **Want the real installable app, with offline support?**
-Service workers and install prompts require HTTPS (or `localhost`). Upload this whole folder to any static host and open it there:
+Service workers and install prompts require HTTPS (or `localhost`). Upload every file in this folder — including `.nojekyll`, which is hidden by default in most file managers — to any static host and open it there:
 
-- GitHub Pages
+- **GitHub Pages** — push all files to the repo root (or `/docs`), then in the repo go to **Settings → Pages** and set the source branch/folder. Make sure `.nojekyll` made it into the commit (`git status` should show it; some GUIs hide dotfiles) and that `index.html` is at the same level as `manifest.json`. Give it a minute or two after each push — Pages deploys are not instant.
 - Netlify / Vercel / Cloudflare Pages (drag-and-drop the folder)
 - Your own server over HTTPS
 
@@ -73,7 +76,7 @@ Shown honestly in the sidebar as roadmap placeholders rather than faked screens:
 
 ## Rebranding for a client
 
-Everything under **Branding & Settings** in the app is live-editable per business: logo, company details, and three brand colors. To change the *default* out-of-the-box colors (not per-user), edit the CSS custom properties at the top of `pixel-warehouse-pro.html` (`--safety`, `--safety-dark`, `--accent`) and the default values inside the `loadBranding()` function.
+Everything under **Branding & Settings** in the app is live-editable per business: logo, company details, and three brand colors. To change the *default* out-of-the-box colors (not per-user), edit the CSS custom properties at the top of `index.html` (`--safety`, `--safety-dark`, `--accent`) and the default values inside the `loadBranding()` function.
 
 To swap the app icon set, replace the files in `icons/` (keep the same filenames and sizes) and update `manifest.json` if you add/remove sizes.
 
